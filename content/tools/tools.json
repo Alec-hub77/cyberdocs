@@ -1,0 +1,92 @@
+[
+  {
+    "id": "kali-linux",
+    "name": "Kali Linux",
+    "category": "Дистрибутив",
+    "difficulty": "beginner",
+    "summary": "Дистрибутив Linux на базі Debian з попередньо встановленими security-інструментами для навчання й легального аудиту.",
+    "site": "https://www.kali.org",
+    "tags": ["linux", "дистрибутив"],
+    "useCase": "Домашня лабораторія у віртуальній машині для практики без встановлення десятків окремих утиліт вручну."
+  },
+  {
+    "id": "nmap",
+    "name": "Nmap",
+    "category": "Сканування мережі",
+    "difficulty": "beginner",
+    "summary": "Утиліта для сканування портів і виявлення хостів та служб у мережі.",
+    "site": "https://nmap.org",
+    "tags": ["мережі", "recon", "сканування"],
+    "useCase": "Перший крок розвідки: які хости живі, які порти відкриті, яка версія служби на них слухає."
+  },
+  {
+    "id": "wireshark",
+    "name": "Wireshark",
+    "category": "Аналіз трафіку",
+    "difficulty": "beginner",
+    "summary": "Аналізатор мережевого трафіку з графічним інтерфейсом для перегляду пакетів у реальному часі.",
+    "site": "https://www.wireshark.org",
+    "tags": ["мережі", "трафік", "аналіз"],
+    "useCase": "Побачити наживо, як виглядає TCP-рукостискання, DNS-запит чи незашифрований HTTP-трафік."
+  },
+  {
+    "id": "burp-suite",
+    "name": "Burp Suite",
+    "category": "Веб-безпека",
+    "difficulty": "intermediate",
+    "summary": "Проксі-сервер для перехоплення, аналізу та модифікації HTTP(S)-трафіку між браузером і сервером.",
+    "site": "https://portswigger.net/burp",
+    "tags": ["web", "proxy", "pentest"],
+    "useCase": "Дослідження логіки веб-застосунку через перехоплення запитів і ручну зміну параметрів у контрольованому середовищі."
+  },
+  {
+    "id": "metasploit",
+    "name": "Metasploit Framework",
+    "category": "Фреймворк експлуатації",
+    "difficulty": "advanced",
+    "summary": "Фреймворк для розробки, тестування та документування дозволених сценаріїв експлуатації у навчальних лабораторіях.",
+    "site": "https://www.metasploit.com",
+    "tags": ["exploitation", "framework"],
+    "useCase": "Використовується виключно на офіційних навчальних платформах або у власній ізольованій лабораторії з письмовим дозволом."
+  },
+  {
+    "id": "theharvester",
+    "name": "theHarvester",
+    "category": "OSINT",
+    "difficulty": "beginner",
+    "summary": "Інструмент збору email-адрес, піддоменів та імен з публічних джерел.",
+    "site": "https://github.com/laramies/theHarvester",
+    "tags": ["osint", "recon"],
+    "useCase": "Швидкий огляд публічного цифрового сліду домену перед глибшим аналізом."
+  },
+  {
+    "id": "shodan",
+    "name": "Shodan",
+    "category": "OSINT",
+    "difficulty": "intermediate",
+    "summary": "Пошукова система пристроїв, підключених до інтернету, з можливістю фільтрації за банерами служб.",
+    "site": "https://www.shodan.io",
+    "tags": ["osint", "iot", "recon"],
+    "useCase": "Оцінка того, які власні сервіси випадково опинилися відкритими в інтернет."
+  },
+  {
+    "id": "hashcat",
+    "name": "Hashcat",
+    "category": "Криптографія",
+    "difficulty": "advanced",
+    "summary": "Високопродуктивний інструмент відновлення паролів за хешем із використанням GPU.",
+    "site": "https://hashcat.net/hashcat/",
+    "tags": ["криптографія", "паролі"],
+    "useCase": "Аудит стійкості власної парольної політики на дозволених для тестування хешах."
+  },
+  {
+    "id": "wazuh",
+    "name": "Wazuh",
+    "category": "Blue team / SIEM",
+    "difficulty": "intermediate",
+    "summary": "Відкрита платформа виявлення загроз, моніторингу логів та реагування на інциденти.",
+    "site": "https://wazuh.com",
+    "tags": ["blue-team", "siem", "monitoring"],
+    "useCase": "Практика захисної сторони: збір логів, кореляція подій, базові правила виявлення."
+  }
+]

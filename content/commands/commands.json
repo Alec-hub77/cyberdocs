@@ -1,0 +1,72 @@
+[
+  {
+    "id": "linux-basics",
+    "title": "Linux: базова навігація та права доступу",
+    "tool": "bash",
+    "items": [
+      { "cmd": "pwd", "desc": "Показати поточний каталог" },
+      { "cmd": "ls -la", "desc": "Список файлів з прихованими та деталями" },
+      { "cmd": "cd /var/log", "desc": "Перейти в каталог логів" },
+      { "cmd": "cat /etc/passwd", "desc": "Переглянути список локальних користувачів" },
+      { "cmd": "chmod 750 script.sh", "desc": "Встановити права: власник rwx, група r-x, інші —" },
+      { "cmd": "ps aux", "desc": "Список усіх запущених процесів" },
+      { "cmd": "ss -tulpn", "desc": "Показати відкриті TCP/UDP порти та процеси, що їх слухають" },
+      { "cmd": "man nmap", "desc": "Відкрити довідку по команді nmap" }
+    ]
+  },
+  {
+    "id": "networking",
+    "title": "Мережева діагностика",
+    "tool": "bash",
+    "items": [
+      { "cmd": "ip a", "desc": "Показати мережеві інтерфейси та IP-адреси" },
+      { "cmd": "ping -c 4 example.com", "desc": "Перевірити доступність хоста (4 пакети)" },
+      { "cmd": "traceroute example.com", "desc": "Показати маршрут пакетів до хоста" },
+      { "cmd": "dig example.com", "desc": "Отримати DNS-запис для домену" },
+      { "cmd": "whois example.com", "desc": "Отримати реєстраційну інформацію домену" },
+      { "cmd": "curl -I https://example.com", "desc": "Отримати лише HTTP-заголовки відповіді" }
+    ]
+  },
+  {
+    "id": "nmap",
+    "title": "Nmap: сканування у власній лабораторії",
+    "tool": "nmap",
+    "items": [
+      { "cmd": "nmap -sn 192.168.56.0/24", "desc": "Виявити живі хости в підмережі (без сканування портів)" },
+      { "cmd": "nmap -sV 192.168.56.10", "desc": "Визначити версії служб на відкритих портах" },
+      { "cmd": "nmap -p 1-1000 192.168.56.10", "desc": "Просканувати перші 1000 портів" },
+      { "cmd": "nmap -A 192.168.56.10", "desc": "Агресивне сканування: ОС, версії, скрипти, traceroute" },
+      { "cmd": "nmap -oN scan_result.txt 192.168.56.10", "desc": "Зберегти результат сканування у файл" }
+    ]
+  },
+  {
+    "id": "osint",
+    "title": "OSINT: розвідка з відкритих джерел",
+    "tool": "theHarvester",
+    "items": [
+      { "cmd": "theHarvester -d example.com -b all", "desc": "Зібрати публічні email та піддомени з усіх джерел" },
+      { "cmd": "whois example.com", "desc": "Реєстраційні дані домену" },
+      { "cmd": "dig +short example.com ANY", "desc": "Короткий вивід усіх доступних DNS-записів" }
+    ]
+  },
+  {
+    "id": "web-recon",
+    "title": "Веб-розвідка",
+    "tool": "bash",
+    "items": [
+      { "cmd": "curl -s -D - https://example.com -o /dev/null", "desc": "Показати заголовки відповіді без тіла сторінки" },
+      { "cmd": "whatweb https://example.com", "desc": "Визначити технології, що використовує сайт" },
+      { "cmd": "gobuster dir -u https://example.com -w wordlist.txt", "desc": "Перебір каталогів сайту за списком слів (лише на дозволених цілях)" }
+    ]
+  },
+  {
+    "id": "git-hygiene",
+    "title": "Git-гігієна для security-практиків",
+    "tool": "git",
+    "items": [
+      { "cmd": "git log -p -- config.env", "desc": "Перевірити історію файлу на випадковий витік секретів" },
+      { "cmd": "git secrets --scan", "desc": "Проскановане репозиторію на наявність відомих патернів секретів" },
+      { "cmd": "git diff --staged", "desc": "Переглянути зміни перед комітом, щоб не закомітити зайве" }
+    ]
+  }
+]

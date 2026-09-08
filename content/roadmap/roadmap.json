@@ -1,0 +1,72 @@
+[
+  {
+    "id": "foundations",
+    "title": "Фундамент",
+    "description": "Поняття та мислення, без яких усе інше вивчається наосліп.",
+    "items": [
+      { "id": "f1", "title": "Тріада CIA та термінологія галузі", "article": "intro-cybersecurity" },
+      { "id": "f2", "title": "Різниця red team / blue team / purple team", "article": "intro-cybersecurity" },
+      { "id": "f3", "title": "Правові та етичні межі: дозвіл, scope, відповідальність", "article": "intro-cybersecurity" }
+    ]
+  },
+  {
+    "id": "networking",
+    "title": "Мережі",
+    "description": "Як дані взагалі подорожують від клієнта до сервера.",
+    "items": [
+      { "id": "n1", "title": "Модель TCP/IP та інкапсуляція", "article": "networking-basics" },
+      { "id": "n2", "title": "Порти та найпоширеніші служби", "article": "networking-basics" },
+      { "id": "n3", "title": "DNS: як імена стають адресами", "article": "networking-basics" },
+      { "id": "n4", "title": "Аналіз трафіку у Wireshark", "tool": "wireshark" }
+    ]
+  },
+  {
+    "id": "linux",
+    "title": "Linux та командний рядок",
+    "description": "Робоча мова майже всієї індустрії security.",
+    "items": [
+      { "id": "l1", "title": "Файлова система та навігація", "article": "linux-fundamentals" },
+      { "id": "l2", "title": "Права доступу та власники файлів", "article": "linux-fundamentals" },
+      { "id": "l3", "title": "Процеси, служби та мережеві сокети", "article": "linux-fundamentals" },
+      { "id": "l4", "title": "Побудувати першу лабораторію в Kali Linux", "tool": "kali-linux" }
+    ]
+  },
+  {
+    "id": "recon",
+    "title": "Розвідка (Recon)",
+    "description": "Перший етап будь-якої легальної оцінки безпеки.",
+    "items": [
+      { "id": "r1", "title": "Основи OSINT та етичні межі збору даних", "article": "osint-fundamentals" },
+      { "id": "r2", "title": "Практика з theHarvester та Shodan", "tool": "theharvester" },
+      { "id": "r3", "title": "Сканування мережі за допомогою Nmap", "article": "nmap-basics" }
+    ]
+  },
+  {
+    "id": "web",
+    "title": "Веб-безпека",
+    "description": "Найпоширеніший вектор реальних інцидентів.",
+    "items": [
+      { "id": "w1", "title": "Карта OWASP Top 10", "article": "web-security-basics" },
+      { "id": "w2", "title": "Перехоплення трафіку у Burp Suite", "tool": "burp-suite" },
+      { "id": "w3", "title": "Практика на легальних навчальних платформах", "article": "web-security-basics" }
+    ]
+  },
+  {
+    "id": "human",
+    "title": "Людський фактор",
+    "description": "Найдешевший спосіб обійти найдорожчий захист.",
+    "items": [
+      { "id": "h1", "title": "Механіка соціальної інженерії та фішингу", "article": "social-engineering" },
+      { "id": "h2", "title": "Аналіз реальних прикладів фішингових листів", "article": "social-engineering" }
+    ]
+  },
+  {
+    "id": "blue-team",
+    "title": "Захисна сторона (Blue Team)",
+    "description": "Виявлення, реагування та моніторинг — дзеркальна половина професії.",
+    "items": [
+      { "id": "b1", "title": "Читання логів та базова кореляція подій", "tool": "wazuh" },
+      { "id": "b2", "title": "Основи криптографії: хеші та підпис", "tool": "hashcat" }
+    ]
+  }
+]

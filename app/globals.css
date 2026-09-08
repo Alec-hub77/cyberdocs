@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: local("JetBrains Mono");
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1c2e20 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #1c2e20;
+  border-radius: 0;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #25412c;
+}
+
+html {
+  background: #050805;
+}
+
+body {
+  background-color: #050805;
+  color: #d7ffe4;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  background-image:
+    linear-gradient(rgba(51,232,107,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(51,232,107,0.05) 1px, transparent 1px);
+  background-size: 42px 42px;
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgba(51, 232, 107, 0.35);
+  color: #eafff1;
+}
+
+:focus-visible {
+  outline: 2px solid #33e86b;
+  outline-offset: 2px;
+}
+
+.prose-term {
+  max-width: 68ch;
+}
+.prose-term h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #93ffb3;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #1c2e20;
+}
+.prose-term h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #c8ffd9;
+  margin-top: 1.75rem;
+  margin-bottom: 0.6rem;
+}
+.prose-term p {
+  color: #b7d9c3;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+  font-size: 0.94rem;
+}
+.prose-term ul, .prose-term ol {
+  color: #b7d9c3;
+  margin: 0 0 1.1rem 0;
+  padding-left: 1.35rem;
+  font-size: 0.94rem;
+  line-height: 1.75;
+}
+.prose-term ul { list-style: none; }
+.prose-term ul li { position: relative; }
+.prose-term ul li::before {
+  content: "›";
+  position: absolute;
+  left: -1.1rem;
+  color: #33e86b;
+}
+.prose-term ol { list-style: decimal; }
+.prose-term ol li::marker { color: #33e86b; }
+.prose-term strong { color: #eafff1; font-weight: 700; }
+.prose-term a { color: #5cf98c; text-decoration: underline; text-underline-offset: 3px; }
+.prose-term code {
+  background: #0f1a12;
+  border: 1px solid #1c2e20;
+  color: #93ffb3;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.85em;
+}
+.prose-term pre {
+  background: #0b120d;
+  border: 1px solid #1c2e20;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1.25rem;
+}
+.prose-term pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+.prose-term table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.25rem;
+  font-size: 0.88rem;
+}
+.prose-term th, .prose-term td {
+  border: 1px solid #1c2e20;
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+}
+.prose-term th {
+  color: #93ffb3;
+  background: #0f1a12;
+}
+.prose-term blockquote {
+  border-left: 2px solid #33e86b;
+  padding-left: 1rem;
+  color: #93ffb3;
+  margin-bottom: 1.25rem;
+}
