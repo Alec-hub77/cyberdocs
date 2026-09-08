@@ -1,12 +1,12 @@
 "use client";
 
-import { createContext, useContext, useMemo, ReactNode } from "react";
+import { createContext, useContext, useMemo, ReactNode, useState } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import type { RoadmapStage } from "@/lib/types";
+import type { AuthUser, RoadmapStage } from "@/lib/types";
 
 interface AppContextValue {
   bookmarks: string[];
-  toggleBookmark: (slug: string) => void;
+  toggleBookmark: (slug: string) => Promise<void>;
   isBookmarked: (slug: string) => boolean;
   progress: Record<string, boolean>;
   toggleRoadmapItem: (itemId: string) => void;
@@ -17,12 +17,35 @@ interface AppContextValue {
 
 const AppContext = createContext<AppContextValue | null>(null);
 
-export function AppProvider({ children, roadmap }: { children: ReactNode; roadmap: RoadmapStage[] }) {
-  const [bookmarks, setBookmarks] = useLocalStorage<string[]>("cyberdocs:bookmarks", []);
+export function AppProvider({
+  children,
+  roadmap,
+  user,
+  initialBookmarks,
+}: {
+  children: ReactNode;
+  roadmap: RoadmapStage[];
+  user: AuthUser | null;
+  initialBookmarks: string[];
+}) {
+  const [bookmarks, setBookmarks] = useState(initialBookmarks);
   const [progress, setProgress] = useLocalStorage<Record<string, boolean>>("cyberdocs:roadmap-progress", {});
 
-  const toggleBookmark = (slug: string) => {
-    setBookmarks((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
+  const toggleBookmark = async (slug: string) => {
+    if (!user) throw new Error("Потрібен вхід, щоб зберігати статті.");
+
+    const wasSaved = bookmarks.includes(slug);
+    setBookmarks((prev) => (wasSaved ? prev.filter((item) => item !== slug) : [...prev, slug]));
+    try {
+      const response = await fetch(`/api/saved/${encodeURIComponent(slug)}`, { method: wasSaved ? "DELETE" : "POST" });
+      if (!response.ok) {
+        const body = (await response.json().catch(() => ({}))) as { error?: string };
+        throw new Error(body.error || "Не вдалося оновити закладки.");
+      }
+    } catch (error) {
+      setBookmarks((prev) => (wasSaved ? [...prev, slug] : prev.filter((item) => item !== slug)));
+      throw error;
+    }
   };
 
   const isBookmarked = (slug: string) => bookmarks.includes(slug);

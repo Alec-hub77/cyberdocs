@@ -1,19 +1,34 @@
-import fs from "fs";
-import path from "path";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getUserTools } from "./tools";
-import type { CommandGroup } from "./types";
+import { uniqueSlug } from "./slugify";
+import type { CommandGroup, CommandGroupInput, CommandItem } from "./types";
 
-function readStaticGroups(): CommandGroup[] {
-  const filePath = path.join(process.cwd(), "content", "commands", "commands.json");
-  const raw = fs.readFileSync(filePath, "utf8");
-  const parsed = JSON.parse(raw) as Omit<CommandGroup, "source">[];
-  return parsed.map((g) => ({ ...g, source: "static" as const }));
+interface CommandGroupRow {
+  id: string;
+  title: string;
+  tool: string;
+  items: CommandGroup["items"];
+}
+
+function cleanItems(items: CommandItem[] | undefined): CommandItem[] {
+  return Array.isArray(items)
+    ? items.filter((item) => item?.cmd?.trim()).map((item) => ({ cmd: item.cmd.trim(), desc: (item.desc || "").trim() }))
+    : [];
 }
 
 export async function getAllCommandGroups(supabase: SupabaseClient): Promise<CommandGroup[]> {
-  const staticGroups = readStaticGroups();
-  const userTools = await getUserTools(supabase);
+  const [{ data, error }, userTools] = await Promise.all([
+    supabase.from("command_groups").select("id, title, tool, items").order("created_at", { ascending: false }),
+    getUserTools(supabase),
+  ]);
+  if (error) throw new Error(error.message);
+
+  const savedGroups: CommandGroup[] = ((data as CommandGroupRow[]) || []).map((group) => ({
+    ...group,
+    items: Array.isArray(group.items) ? group.items : [],
+    source: "custom",
+    editable: true,
+  }));
   const toolGroups: CommandGroup[] = userTools
     .filter((t) => t.commands.length > 0)
     .map((t) => ({
@@ -22,8 +37,58 @@ export async function getAllCommandGroups(supabase: SupabaseClient): Promise<Com
       tool: t.name,
       items: t.commands,
       source: "custom",
+      editable: false,
     }));
-  return [...toolGroups, ...staticGroups];
+  return [...savedGroups, ...toolGroups];
+}
+
+export async function getEditableCommandGroup(supabase: SupabaseClient, id: string): Promise<CommandGroup | null> {
+  const { data, error } = await supabase.from("command_groups").select("id, title, tool, items").eq("id", id).maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) return null;
+  const group = data as CommandGroupRow;
+  return { ...group, items: Array.isArray(group.items) ? group.items : [], source: "custom", editable: true };
+}
+
+export async function createCommandGroup(
+  supabase: SupabaseClient,
+  userId: string,
+  input: CommandGroupInput,
+): Promise<CommandGroup> {
+  if (!input.title?.trim()) throw new Error("Потрібна назва групи команд.");
+  const existing = await getAllCommandGroups(supabase);
+  const id = uniqueSlug(input.title, existing.filter((group) => group.editable).map((group) => group.id));
+  const { data, error } = await supabase
+    .from("command_groups")
+    .insert({ id, user_id: userId, title: input.title.trim(), tool: input.tool.trim() || "Інше", items: cleanItems(input.items) })
+    .select("id, title, tool, items")
+    .single();
+  if (error) throw new Error(error.message);
+  const group = data as CommandGroupRow;
+  return { ...group, items: Array.isArray(group.items) ? group.items : [], source: "custom", editable: true };
+}
+
+export async function updateCommandGroup(
+  supabase: SupabaseClient,
+  id: string,
+  input: CommandGroupInput,
+): Promise<CommandGroup> {
+  if (!input.title?.trim()) throw new Error("Потрібна назва групи команд.");
+  const { data, error } = await supabase
+    .from("command_groups")
+    .update({ title: input.title.trim(), tool: input.tool.trim() || "Інше", items: cleanItems(input.items), updated_at: new Date().toISOString() })
+    .eq("id", id)
+    .select("id, title, tool, items")
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) throw new Error("Групу команд не знайдено.");
+  const group = data as CommandGroupRow;
+  return { ...group, items: Array.isArray(group.items) ? group.items : [], source: "custom", editable: true };
+}
+
+export async function deleteCommandGroup(supabase: SupabaseClient, id: string): Promise<void> {
+  const { error } = await supabase.from("command_groups").delete().eq("id", id);
+  if (error) throw new Error(error.message);
 }
 
 export async function getCommandGroupById(supabase: SupabaseClient, id: string): Promise<CommandGroup | null> {

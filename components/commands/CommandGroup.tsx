@@ -1,12 +1,40 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Pencil } from "lucide-react";
 import CopyButton from "@/components/ui/CopyButton";
+import ConfirmDeleteButton from "@/components/ui/ConfirmDeleteButton";
+import { apiRequest } from "@/lib/api-client";
 import type { CommandGroup as CommandGroupType } from "@/lib/types";
 
 export default function CommandGroup({ group }: { group: CommandGroupType }) {
+  const router = useRouter();
+
+  async function remove() {
+    try {
+      await apiRequest(`/api/commands/${group.id}`, { method: "DELETE" });
+      router.refresh();
+    } catch (error) {
+      alert((error as Error).message);
+    }
+  }
+
   return (
     <section id={group.id} className="scroll-mt-20 border border-line bg-surface/60">
       <div className="flex items-center justify-between border-b border-line px-4 py-3">
         <h2 className="text-sm font-bold text-ink">{group.title}</h2>
-        <span className="text-[11px] text-term-500">{group.tool}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] text-term-500">{group.tool}</span>
+          {group.editable && (
+            <>
+              <Link href={`/commands/${group.id}/edit`} className="border border-line p-1.5 text-muted hover:border-term-600 hover:text-term-300" aria-label="Редагувати групу команд">
+                <Pencil size={13} />
+              </Link>
+              <ConfirmDeleteButton onConfirm={remove} label="Видалити групу команд" />
+            </>
+          )}
+        </div>
       </div>
       <ul className="divide-y divide-line">
         {group.items.map((item, idx) => (

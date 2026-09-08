@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { uniqueSlug } from "./slugify";
 import type { Tool, EditableTool, ToolInput, CommandItem, Difficulty } from "./types";
@@ -42,13 +40,6 @@ function rowToTool(row: ToolRow): Tool {
   };
 }
 
-function readStaticTools(): Tool[] {
-  const filePath = path.join(process.cwd(), "content", "tools", "tools.json");
-  const raw = fs.readFileSync(filePath, "utf8");
-  const parsed = JSON.parse(raw) as Omit<Tool, "source">[];
-  return parsed.map((t) => ({ ...t, commands: t.commands || [], source: "static" as const }));
-}
-
 function cleanCommands(commands: CommandItem[] | undefined): CommandItem[] {
   return Array.isArray(commands)
     ? commands
@@ -64,11 +55,9 @@ export async function getUserTools(supabase: SupabaseClient): Promise<Tool[]> {
   return ((data as ToolRow[]) || []).map(rowToTool);
 }
 
-/** Static reference tools (visible to everyone) plus the current user's own, if logged in. */
+/** Only the current user's tools. RLS excludes all other users' rows. */
 export async function getAllTools(supabase: SupabaseClient): Promise<Tool[]> {
-  const staticList = readStaticTools();
-  const customList = await getUserTools(supabase);
-  return [...customList, ...staticList];
+  return getUserTools(supabase);
 }
 
 export async function getToolById(supabase: SupabaseClient, id: string): Promise<Tool | null> {
