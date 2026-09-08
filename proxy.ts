@@ -2,9 +2,10 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
 function isProtectedPath(pathname: string): boolean {
-  if (pathname.startsWith("/notes")) return true;
   if (/^\/tools\/[^/]+\/edit$/.test(pathname)) return true;
   if (/^\/notes\/[^/]+\/edit$/.test(pathname)) return true;
+  if (pathname === "/commands/new") return true;
+  if (/^\/commands\/[^/]+\/edit$/.test(pathname)) return true;
   return false;
 }
 

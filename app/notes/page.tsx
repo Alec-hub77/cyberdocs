@@ -1,16 +1,18 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { Plus } from "lucide-react";
 import { createClient, getAuthenticatedUser } from "@/lib/supabase/server";
 import { getNotesRendered } from "@/lib/notes";
 import NoteCard from "@/components/notes/NoteCard";
+import AuthRequired from "@/components/auth/AuthRequired";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Замітки — cyberdocs" };
 
 export default async function NotesPage() {
   const user = await getAuthenticatedUser();
-  if (!user) redirect("/login?next=/notes");
+  if (!user) {
+    return <AuthRequired title="Замітки" description="Ваші приватні замітки доступні лише у вашому акаунті." next="/notes" />;
+  }
 
   const supabase = await createClient();
   const notes = await getNotesRendered(supabase);

@@ -102,6 +102,13 @@ export interface CommandGroup {
   tool: string;
   items: CommandItem[];
   source: ContentSource;
+  editable?: boolean;
+}
+
+export interface CommandGroupInput {
+  title: string;
+  tool: string;
+  items: CommandItem[];
 }
 
 export interface Note {

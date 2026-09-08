@@ -12,13 +12,14 @@ interface AppShellProps {
   roadmap: RoadmapStage[];
   searchEntries: SearchEntry[];
   user: AuthUser | null;
+  initialBookmarks: string[];
 }
 
-export default function AppShell({ children, roadmap, searchEntries, user }: AppShellProps) {
+export default function AppShell({ children, roadmap, searchEntries, user, initialBookmarks }: AppShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <AppProvider roadmap={roadmap}>
+    <AppProvider roadmap={roadmap} user={user} initialBookmarks={initialBookmarks}>
       <div className="flex min-h-screen">
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} user={user} />
         <div className="flex min-h-screen flex-1 flex-col">
