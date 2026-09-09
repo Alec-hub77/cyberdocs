@@ -92,7 +92,9 @@ create index if not exists articles_created_at_idx on public.articles (created_a
 -- =========================================================
 create table if not exists public.saved_articles (
   user_id uuid not null references auth.users(id) on delete cascade,
-  article_slug text not null references public.articles(slug) on delete cascade,
+  -- An article can be a database article or a bundled Markdown article.
+  -- Its existence is verified by the application before saving.
+  article_slug text not null,
   created_at timestamptz not null default now(),
   primary key (user_id, article_slug)
 );
