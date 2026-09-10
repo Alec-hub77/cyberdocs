@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useApp } from "@/context/AppContext";
 import ProgressBar from "@/components/ui/ProgressBar";
 import LogoutButton from "@/components/forms/LogoutButton";
-import type { AuthUser } from "@/lib/types";
 import {
   Terminal,
   FileText,
@@ -32,12 +31,11 @@ const NAV = [
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
-  user: AuthUser | null;
 }
 
-export default function Sidebar({ open, onClose, user }: SidebarProps) {
+export default function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const { percentDone } = useApp();
+  const { percentDone, user } = useApp();
 
   return (
     <>

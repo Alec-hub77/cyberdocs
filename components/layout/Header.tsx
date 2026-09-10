@@ -3,7 +3,6 @@
 import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import SearchOverlay from "@/components/ui/SearchOverlay";
-import type { SearchEntry } from "@/lib/types";
 
 const TITLES: Record<string, string> = {
   "/": "dashboard",
@@ -20,10 +19,9 @@ const TITLES: Record<string, string> = {
 
 interface HeaderProps {
   onMenuClick: () => void;
-  searchEntries: SearchEntry[];
 }
 
-export default function Header({ onMenuClick, searchEntries }: HeaderProps) {
+export default function Header({ onMenuClick }: HeaderProps) {
   const pathname = usePathname();
   const base = "/" + (pathname.split("/")[1] || "");
   const title = TITLES[base] ?? TITLES[pathname] ?? "";
@@ -38,7 +36,7 @@ export default function Header({ onMenuClick, searchEntries }: HeaderProps) {
         {title ? `/${title}` : ""}
       </p>
       <div className="ml-auto w-full max-w-xs">
-        <SearchOverlay entries={searchEntries} />
+        <SearchOverlay />
       </div>
     </header>
   );

@@ -1,10 +1,11 @@
 "use client";
 
-import { createContext, useContext, useMemo, ReactNode, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, ReactNode, useState } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import type { AuthUser, RoadmapStage } from "@/lib/types";
 
 interface AppContextValue {
+  user: AuthUser | null;
   bookmarks: string[];
   toggleBookmark: (slug: string) => Promise<void>;
   isBookmarked: (slug: string) => boolean;
@@ -20,16 +21,36 @@ const AppContext = createContext<AppContextValue | null>(null);
 export function AppProvider({
   children,
   roadmap,
-  user,
-  initialBookmarks,
 }: {
   children: ReactNode;
   roadmap: RoadmapStage[];
-  user: AuthUser | null;
-  initialBookmarks: string[];
 }) {
-  const [bookmarks, setBookmarks] = useState(initialBookmarks);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [bookmarks, setBookmarks] = useState<string[]>([]);
   const [progress, setProgress] = useLocalStorage<Record<string, boolean>>("cyberdocs:roadmap-progress", {});
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void fetch("/api/session", { cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Не вдалося завантажити сесію.");
+        return (await response.json()) as { user: AuthUser | null; bookmarks: string[] };
+      })
+      .then((session) => {
+        if (!cancelled) {
+          setUser(session.user);
+          setBookmarks(session.bookmarks);
+        }
+      })
+      .catch(() => {
+        // The shell remains usable when the optional session request fails.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const toggleBookmark = async (slug: string) => {
     if (!user) throw new Error("Потрібен вхід, щоб зберігати статті.");
@@ -64,6 +85,7 @@ export function AppProvider({
   const percentDone = totalItems > 0 ? Math.round((doneCount / totalItems) * 100) : 0;
 
   const value: AppContextValue = {
+    user,
     bookmarks,
     toggleBookmark,
     isBookmarked,
