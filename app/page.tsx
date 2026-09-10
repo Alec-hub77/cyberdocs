@@ -9,15 +9,13 @@ import { getAllTools } from "@/lib/tools";
 import { getAllCommandGroups } from "@/lib/commands";
 import { getRoadmap, getRoadmapItemCount } from "@/lib/roadmap";
 
-export const dynamic = "force-dynamic";
-
 export default async function HomePage() {
   const supabase = await createClient();
-  const [articles, tools, commandGroups] = await Promise.all([
+  const [articles, tools] = await Promise.all([
     getAllArticlesMeta(supabase),
     getAllTools(supabase),
-    getAllCommandGroups(supabase),
   ]);
+  const commandGroups = await getAllCommandGroups(supabase, tools);
   const roadmap = getRoadmap();
   const totalCommands = commandGroups.reduce((s, g) => s + g.items.length, 0);
 

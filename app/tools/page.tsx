@@ -4,16 +4,12 @@ import ToolCard from "@/components/tools/ToolCard";
 import AuthRequired from "@/components/auth/AuthRequired";
 
 export const metadata = { title: "Інструменти — cyberdocs" };
-export const dynamic = "force-dynamic";
-
 export default async function ToolsPage() {
-  const user = await getAuthenticatedUser();
+  const supabase = await createClient();
+  const [user, tools] = await Promise.all([getAuthenticatedUser(), getAllTools(supabase)]);
   if (!user) {
     return <AuthRequired title="Інструменти" description="Ваші інструменти та команди доступні лише у вашому акаунті." next="/tools" />;
   }
-
-  const supabase = await createClient();
-  const tools = await getAllTools(supabase);
   const categories = Array.from(new Set(tools.map((t) => t.category)));
 
   return (
