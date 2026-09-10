@@ -6,16 +6,12 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 
 export const metadata = { title: "Команди — cyberdocs" };
-export const dynamic = "force-dynamic";
-
 export default async function CommandsPage() {
-  const user = await getAuthenticatedUser();
+  const supabase = await createClient();
+  const [user, groups] = await Promise.all([getAuthenticatedUser(), getAllCommandGroups(supabase)]);
   if (!user) {
     return <AuthRequired title="Команди" description="Команди ваших інструментів доступні лише після входу." next="/commands" />;
   }
-
-  const supabase = await createClient();
-  const groups = await getAllCommandGroups(supabase);
 
   return (
     <div className="mx-auto max-w-4xl">

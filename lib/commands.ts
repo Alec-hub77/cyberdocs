@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getUserTools } from "./tools";
 import { uniqueSlug } from "./slugify";
-import type { CommandGroup, CommandGroupInput, CommandItem } from "./types";
+import type { CommandGroup, CommandGroupInput, CommandItem, Tool } from "./types";
 
 interface CommandGroupRow {
   id: string;
@@ -16,10 +16,11 @@ function cleanItems(items: CommandItem[] | undefined): CommandItem[] {
     : [];
 }
 
-export async function getAllCommandGroups(supabase: SupabaseClient): Promise<CommandGroup[]> {
+export async function getAllCommandGroups(supabase: SupabaseClient, knownTools?: Tool[]): Promise<CommandGroup[]> {
+  const groupsRequest = supabase.from("command_groups").select("id, title, tool, items").order("created_at", { ascending: false });
   const [{ data, error }, userTools] = await Promise.all([
-    supabase.from("command_groups").select("id, title, tool, items").order("created_at", { ascending: false }),
-    getUserTools(supabase),
+    groupsRequest,
+    knownTools ? Promise.resolve(knownTools) : getUserTools(supabase),
   ]);
   if (error) throw new Error(error.message);
 

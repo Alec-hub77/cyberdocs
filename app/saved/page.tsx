@@ -4,16 +4,12 @@ import SavedArticles from "@/components/articles/SavedArticles";
 import AuthRequired from "@/components/auth/AuthRequired";
 
 export const metadata = { title: "Збережене — cyberdocs" };
-export const dynamic = "force-dynamic";
-
 export default async function SavedPage() {
-  const user = await getAuthenticatedUser();
+  const supabase = await createClient();
+  const [user, articles] = await Promise.all([getAuthenticatedUser(), getAllArticlesMeta(supabase)]);
   if (!user) {
     return <AuthRequired title="Збережене" description="Ваші збережені статті доступні лише після входу." next="/saved" />;
   }
-
-  const supabase = await createClient();
-  const articles = await getAllArticlesMeta(supabase);
 
   return (
     <div className="mx-auto max-w-5xl">

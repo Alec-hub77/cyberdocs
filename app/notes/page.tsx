@@ -5,17 +5,14 @@ import { getNotesRendered } from "@/lib/notes";
 import NoteCard from "@/components/notes/NoteCard";
 import AuthRequired from "@/components/auth/AuthRequired";
 
-export const dynamic = "force-dynamic";
 export const metadata = { title: "Замітки — cyberdocs" };
 
 export default async function NotesPage() {
-  const user = await getAuthenticatedUser();
+  const supabase = await createClient();
+  const [user, notes] = await Promise.all([getAuthenticatedUser(), getNotesRendered(supabase)]);
   if (!user) {
     return <AuthRequired title="Замітки" description="Ваші приватні замітки доступні лише у вашому акаунті." next="/notes" />;
   }
-
-  const supabase = await createClient();
-  const notes = await getNotesRendered(supabase);
 
   return (
     <div className="mx-auto max-w-3xl">
