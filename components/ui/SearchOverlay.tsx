@@ -13,19 +13,42 @@ const TYPE_META: Record<SearchEntryType, { label: string; icon: typeof FileText 
   note: { label: "замітка", icon: StickyNote },
 };
 
-export default function SearchOverlay({ entries }: { entries: SearchEntry[] }) {
+export default function SearchOverlay() {
   const [open, setOpen] = useState(false);
+  const [entries, setEntries] = useState<SearchEntry[] | null>(null);
+  const [loadError, setLoadError] = useState(false);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const fuse = useMemo(() => createFuse(entries), [entries]);
+  const fuse = useMemo(() => createFuse(entries ?? []), [entries]);
 
   const results = useMemo(() => {
-    if (!query.trim()) return entries.slice(0, 8);
+    if (!query.trim()) return (entries ?? []).slice(0, 8);
     return fuse.search(query, { limit: 8 }).map((r) => r.item);
   }, [query, fuse, entries]);
+
+  useEffect(() => {
+    if (!open || entries !== null || loadError) return;
+
+    let cancelled = false;
+    void fetch("/api/search", { cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Не вдалося завантажити пошук.");
+        return (await response.json()) as { entries: SearchEntry[] };
+      })
+      .then((data) => {
+        if (!cancelled) setEntries(data.entries);
+      })
+      .catch(() => {
+        if (!cancelled) setLoadError(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [entries, loadError, open]);
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -104,7 +127,13 @@ export default function SearchOverlay({ entries }: { entries: SearchEntry[] }) {
               />
             </div>
             <ul className="max-h-[50vh] overflow-y-auto py-1">
-              {results.length === 0 && (
+              {entries === null && !loadError && (
+                <li className="px-4 py-6 text-center text-sm text-muted">Завантаження пошуку…</li>
+              )}
+              {loadError && (
+                <li className="px-4 py-6 text-center text-sm text-muted">Не вдалося завантажити пошук. Спробуйте ще раз.</li>
+              )}
+              {entries !== null && !loadError && results.length === 0 && (
                 <li className="px-4 py-6 text-center text-sm text-muted">
                   Нічого не знайдено. Спробуйте інший запит.
                 </li>
