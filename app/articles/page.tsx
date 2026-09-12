@@ -13,8 +13,7 @@ export default async function ArticlesPage() {
     <div className="mx-auto max-w-5xl">
       <h1 className="mb-1 text-xl font-bold text-ink">Статті</h1>
       <p className="mb-6 text-sm text-muted">
-        Конспекти тем із тегами та рівнем складності. {articles.length} матеріалів. Публічні — доступні всім,
-        без входу.
+        Конспекти тем із тегами та рівнем складності. {articles.length} матеріалів. Публічні — доступні всім, без входу.
       </p>
       <ArticleList articles={articles} />
     </div>

@@ -5,9 +5,7 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
     <html lang="uk">
       <body style={{ background: "#050805", color: "#d7ffe4", fontFamily: "monospace" }}>
         <div style={{ maxWidth: 480, margin: "80px auto", textAlign: "center", padding: "0 16px" }}>
-          <p style={{ color: "#ff5c5c", marginBottom: 16 }}>
-            Критична помилка застосунку. Перевірте налаштування Supabase (env-змінні) і спробуйте оновити сторінку.
-          </p>
+          <p style={{ color: "#ff5c5c", marginBottom: 16 }}>Критична помилка застосунку. Спробуйте оновити сторінку.</p>
           <button
             onClick={() => reset()}
             style={{

@@ -14,10 +14,6 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
       <AlertTriangle size={28} className="mx-auto mb-4 text-rose" />
       <p className="mb-2 text-term-500">$ curl status</p>
       <p className="mb-2 text-sm text-rose">Не вдалося завантажити дані.</p>
-      <p className="mb-6 text-xs text-muted">
-        Найімовірніша причина — Supabase тимчасово недоступний або не налаштований (перевірте
-        NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY).
-      </p>
       <div className="flex items-center justify-center gap-2">
         <button
           onClick={() => reset()}
